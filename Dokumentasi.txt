@@ -1,0 +1,25 @@
+DOKUMENTASI TEKNIS SISTEM: SVETIKTOK v2.0
+Status Dokumen: Production-Ready / Developer Guide Arsitektur: Python Flask Backend dan Vanilla JS Frontend
+
+1. Arsitektur Folder dan File Komponen
+svetiktok.py (Backend Engine): Web server utama berbasis Flask. Mengelola perutean API, memproses data fetching ke TikWM API, mengamankan server via rate limiting, serta mengoperasikan 4 background threads mandiri. svetiktok.html (Frontend Interface): Antarmuka pengguna tunggal. Mengatur seluruh rendering visual berbasis Dark Mode Aesthetic, mengontrol interaktivitas kolom input dengan fitur tombol hapus X otomatis, menampilkan animasi state loading, serta menangani logika unduhan lewat manipulasi DOM.
+
+2. Spesifikasi dan Fitur Otomatis Backend
+Sistem mengoperasikan logika penanganan performa otomatis secara asynchronous melalui 4 Background Threads: Rate Limiting: Membatasi request maksimal sebanyak 15 kali per menit per IP address. Jika ditembus, IP dikunci sementara selama 1 menit (HTTP 429). Thread Pembersih Sampah: Berjalan setiap 3 menit, memindai folder /tmp dan menghapus file sampah download berumur di atas 10 menit agar disk server tidak penuh. Thread Penjadwal Tes Kesehatan: Berjalan setiap 30 detik. Tepat jam 15:00 siang, otomatis memicu tes API dan lapor analitik ke Telegram. Thread Detak Jantung Server: Berjalan berkala tiap 8 jam untuk validasi API TikWM dan melapor ke Telegram Bot. Thread Anti-Mati Suri: Berjalan setiap 4 menit untuk ping HTTP GET ke endpoint /api/ping miliknya sendiri agar server hosting gratisan tetap aktif 24/7.
+
+3. Dokumentasi Endpoint API
+GET /api/ping: Indikator kesehatan server. POST /api/search: Mengambil feed video dari TikWM berdasarkan kata kunci. POST /api/download_url: Mengekstrak informasi tautan video TikTok tunggal. GET /api/thumb: Proxy gambar cover TikTok untuk menghindari error HTTP 403 Forbidden (CORS Policy). POST /api/fast_mp3: Mengambil URL audio murni dengan helper resolve_audio_url. GET /api/get_video: Streaming chunking data sebesar 64KB langsung dari CDN TikTok ke user.
+
+4. Arsitektur Frontend dan UI UX
+CSS Theme Variables: Mengatur konsistensi warna latar pekat gelap dan aksen gradasi modern dinamis. Tombol Hapus Instan (Clear X): Fungsi untuk memunculkan tombol "✕" murni tanpa background saat kolom terisi dan menghapusnya secara instan saat diklik. State Transisi Animasi Loading: Menyuntikkan kelas active ke elemen search-loading untuk memunculkan spinner cincin cyan berputar tepat di bawah tombol pencarian selama proses fetch berjalan. Download Bubbles: Kotak notifikasi mengambang dinamis di elemen dl-container dengan progress bar horizontal.
+
+5. Variabel Lingkungan Sistem (.env)
+PORT: Default 8080. TELEGRAM_TOKEN: Token bot Telegram. TELEGRAM_CHAT_ID: ID numerik chat atau grup.
+
+
+⚠️ NOTE :
+jika masih kesulitan, menangani code tersebut silahkan, kirim source code ke 
+ai pilihanmu dan ikuti, panduan dan saran yang di berikan ai
+
+
+

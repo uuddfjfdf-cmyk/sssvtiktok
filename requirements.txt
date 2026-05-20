@@ -1,0 +1,7 @@
+Flask
+Flask-CORS
+Flask-Limiter
+requests
+mutagen
+gunicorn
+gevent
